@@ -1,18 +1,22 @@
 VIKINGTOOLS DEDICATED AI COMPUTER — FEDORA 44
 Prepared 12 October 2026. x86_64 Fedora 44 desktop; run on the NEW computer only.
 
-1. Copy this complete folder to the new computer.
-2. Copy your existing admin SSH PUBLIC key (.pub) to that computer too.
-   Never copy your private key or current ChatGPT login files.
-3. Open a local terminal inside this folder and run:
+1. Connect the new Fedora computer to the internet and open Terminal.
+2. Paste these three lines:
 
-      sudo bash setup.sh /path/to/your-admin-key.pub
+   sudo dnf install -y curl
+   curl --proto '=https' --tlsv1.2 -fL https://raw.githubusercontent.com/keglerum/vikingtools-ai-fedora44/main/bootstrap.sh -o /tmp/vikingtools-bootstrap.sh
+   sudo bash /tmp/vikingtools-bootstrap.sh
 
-   The script uses the existing Fedora admin account. It asks you to sign into
-   Tailscale and choose a VNC password. It downloads the official ChatGPT app.
+3. Enter your Fedora admin password, sign into Tailscale when prompted, and set
+   the VNC password. The installer installs the apps and tools itself.
 4. Open ChatGPT from the applications menu and sign into your own account.
-5. Read ADMIN-CONTROL.md. It covers the GPU phase, model activation, remote
-   connection, and connecting the customer assistant to the website later.
+5. Give ChatGPT FIRST-CHAT-PROMPT.txt from your home folder to finish GPU/model
+   setup. Read ADMIN-CONTROL.md for details.
+
+No Git or AI app needs to be installed beforehand. SSH keys can be added later
+with sudo vt-add-admin-key. Remote password login stays disabled. A downloaded
+bundle can also be started locally with sudo bash setup.sh (no key required).
 
 INSTALLED
 Tailscale; private SSH; private TigerVNC/Xfce desktop; ChatGPT with bundled Codex;

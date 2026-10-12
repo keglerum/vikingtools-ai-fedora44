@@ -16,12 +16,9 @@ OTHER_ADMINS=$(getent group wheel | cut -d: -f4 | tr ',' '\n' | sed "/^$ADMIN$/d
 [[ -z $OTHER_ADMINS ]] || { echo "Other wheel members exist: $OTHER_ADMINS. Review them first." >&2; exit 1; }
 ADMIN_HOME=$(getent passwd "$ADMIN" | cut -d: -f6)
 [[ $ADMIN_HOME == /home/* && -d $ADMIN_HOME && ! -L $ADMIN_HOME ]]
+# A public key is optional during first installation; password login stays disabled.
 KEY=${1:-}
-if [[ -z $KEY ]]; then read -rp 'Path to your admin SSH PUBLIC key (.pub), copied from your current computer: ' KEY; fi
-[[ -f $KEY ]] && ssh-keygen -lf "$KEY" >/dev/null
-[[ $(wc -l < "$KEY") -le 1 ]] || { echo 'Supply one public key.' >&2; exit 1; }
-PUBKEY=$(cat -- "$KEY")
-[[ $PUBKEY == ssh-ed25519\ * || $PUBKEY == ssh-rsa\ * || $PUBKEY == ecdsa-sha2-* ]] || { echo 'Unsupported public key format.' >&2; exit 1; }
+if [[ -n $KEY && ! -f $KEY ]]; then echo 'Public key file not found.' >&2; exit 1; fi
 INSTALL_MARKER=/var/lib/vikingtools-setup
 mkdir -p "$INSTALL_MARKER"
 if [[ -f $INSTALL_MARKER/admin ]]; then [[ $(cat "$INSTALL_MARKER/admin") == "$ADMIN" ]]; fi
@@ -60,8 +57,17 @@ TS_IP=$(tailscale ip -4)
 
 install -d -m 700 -o "$ADMIN" -g "$(id -gn "$ADMIN")" "$ADMIN_HOME/.ssh"
 AUTH_KEYS="$ADMIN_HOME/.ssh/authorized_keys"
+[[ ! -L $AUTH_KEYS ]]
 touch "$AUTH_KEYS"
-rg -qxF -- "$PUBKEY" "$AUTH_KEYS" || printf '%s\n' "$PUBKEY" >> "$AUTH_KEYS"
+if [[ -n $KEY ]]; then
+  ssh-keygen -lf "$KEY" >/dev/null
+  [[ $(wc -l < "$KEY") -le 1 ]] || { echo 'Supply one public key.' >&2; exit 1; }
+  PUBKEY=$(cat -- "$KEY")
+  [[ $PUBKEY == ssh-ed25519\ * || $PUBKEY == ssh-rsa\ * || $PUBKEY == ecdsa-sha2-* ]]
+  rg -qxF -- "$PUBKEY" "$AUTH_KEYS" || printf '%s\n' "$PUBKEY" >> "$AUTH_KEYS"
+else
+  echo 'SSH key deferred. Remote login stays unavailable until an admin key is added.'
+fi
 chown "$ADMIN:$(id -gn "$ADMIN")" "$AUTH_KEYS"
 chmod 600 "$AUTH_KEYS"
 restorecon -RF "$ADMIN_HOME/.ssh"
@@ -191,6 +197,7 @@ install -m 755 "$BASE/files/activate-model.sh" /usr/local/sbin/vt-activate-model
 install -m 755 "$BASE/files/diagnostics.sh" /usr/local/sbin/vt-diagnostics
 install -m 755 "$BASE/files/gpu-inventory.py" /usr/local/sbin/vt-gpu-inventory
 install -m 755 "$BASE/files/import-help.sh" /usr/local/sbin/vt-import-help
+install -m 755 "$BASE/files/add-admin-key.sh" /usr/local/sbin/vt-add-admin-key
 install -m 755 "$BASE/files/enable-ai-admin.sh" /usr/local/sbin/vt-enable-ai-admin
 # User requested full AI control: only the named admin session gets passwordless sudo.
 /usr/local/sbin/vt-enable-ai-admin
@@ -266,8 +273,10 @@ systemctl restart ollama vikingtools-support
 echo "Automatic GPU report saved to $INSTALL_MARKER/graphics-cards.json"
 install -m 600 "$BASE/ADMIN-CONTROL.md" "$ADMIN_HOME/ADMIN-CONTROL.md"
 chown "$ADMIN:$(id -gn "$ADMIN")" "$ADMIN_HOME/ADMIN-CONTROL.md"
+install -m 600 -o "$ADMIN" -g "$(id -gn "$ADMIN")" "$BASE/FIRST-CHAT-PROMPT.txt" "$ADMIN_HOME/FIRST-CHAT-PROMPT.txt"
 echo "Prepared. Admin SSH: ssh $ADMIN@$TS_IP"
 echo "VNC tunnel: ssh -N -L 5901:127.0.0.1:5901 $ADMIN@$TS_IP"
 echo 'Open ChatGPT as your admin user and sign in yourself. Never run the desktop app as root.'
-echo 'Next: review ADMIN-CONTROL.md, restrict Tailscale grants, verify GPU drivers, then activate a model.'
+echo 'Next: open ChatGPT, use FIRST-CHAT-PROMPT.txt in your home folder, and finish GPU/model setup.'
+echo 'If no SSH key was supplied, add it later with: sudo vt-add-admin-key'
 echo 'Customer API is private and disabled for answers until a model is activated. No site deployment performed.'

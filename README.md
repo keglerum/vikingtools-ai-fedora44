@@ -2,15 +2,34 @@
 
 Setup for a dedicated Fedora 44 x86_64 computer running a local customer-help model, with separate administrator access.
 
-## Install on the new computer
+## Install on a fresh computer
+
+Connect Fedora 44 to the internet, open **Terminal**, and paste these three lines:
 
 ```sh
-git clone https://github.com/keglerum/vikingtools-ai-fedora44.git
-cd vikingtools-ai-fedora44
-sudo bash setup.sh /path/to/your-admin-ssh-public-key.pub
+sudo dnf install -y curl
+curl --proto '=https' --tlsv1.2 -fL https://raw.githubusercontent.com/keglerum/vikingtools-ai-fedora44/main/bootstrap.sh -o /tmp/vikingtools-bootstrap.sh
+sudo bash /tmp/vikingtools-bootstrap.sh
 ```
 
-Copy only your admin SSH **public** key to the new computer. Run initial setup in its local terminal. Sign into Tailscale and ChatGPT yourself when prompted.
+Enter your Fedora admin password when requested. The startup script installs its
+own download/extraction tools, downloads this repository, verifies the included
+file checksums, and runs the main installer. Git, Python, Node, ChatGPT and
+remote-access apps do not need to be installed beforehand. Fedora's built-in
+terminal, Bash, sudo and DNF are enough to start. Checksums check bundle integrity;
+they do not independently authenticate the repository publisher.
+
+Sign into your own Tailscale account when the installer shows its login link, and
+choose a VNC password. When finished, open **ChatGPT** from the applications menu,
+sign in, and give it `FIRST-CHAT-PROMPT.txt` from your home folder.
+
+An SSH key is not required to install. Remote SSH password login remains disabled.
+Add your other computer's SSH **public** key later using `sudo vt-add-admin-key`;
+it prompts for the key. Never paste a private key. ChatGPT on this computer can
+help with that step and inspect the detected mining cards.
+
+If you download the complete repository ZIP using the browser instead, extract
+it, open Terminal in the extracted folder, and run `sudo bash bootstrap.sh`.
 
 ## Included
 

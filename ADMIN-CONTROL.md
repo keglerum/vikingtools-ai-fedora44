@@ -35,6 +35,16 @@ command or an admin configuration change.
 
 ## Private remote access
 
+The fresh-install entry point is `bootstrap.sh`. It installs download tools and
+fetches the complete setup. Its local copy is kept under
+`/var/lib/vikingtools-setup/source` for admin retries. The setup places
+`FIRST-CHAT-PROMPT.txt` in your home folder for the new ChatGPT session.
+
+An SSH public key is optional during installation. If you deferred it, remote
+SSH remains unavailable until you run `sudo vt-add-admin-key` locally and paste
+the public key from your other computer. Password authentication stays disabled.
+You may also pass a public-key file to `sudo vt-add-admin-key FILE.pub`.
+
 The setup prints the machine's Tailscale IP and SSH command. Replace ADMIN and
 TAILSCALE_IP below with those values; run from your existing admin computer:
 
