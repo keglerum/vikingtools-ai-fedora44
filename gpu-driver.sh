@@ -2,6 +2,7 @@
 # Optional GPU phase: choose only after verifying exact cards against current vendor support.
 set -Eeuo pipefail
 [[ $EUID == 0 ]] || { echo 'Run with sudo.' >&2; exit 1; }
+# shellcheck source=/dev/null
 source /etc/os-release
 [[ $ID == fedora && $VERSION_ID == 44 && $(uname -m) == x86_64 ]]
 case ${1:-auto} in

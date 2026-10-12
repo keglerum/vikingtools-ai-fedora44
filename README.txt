@@ -14,6 +14,9 @@ Prepared 12 October 2026. x86_64 Fedora 44 desktop; run on the NEW computer only
 5. Give ChatGPT FIRST-CHAT-PROMPT.txt from your home folder to finish GPU/model
    setup. Read ADMIN-CONTROL.md for details.
 
+If using the complete bundle on a USB disk: open its folder, open Terminal there,
+and run sudo bash START-HERE.sh. Internet is still required for the downloads.
+
 No Git or AI app needs to be installed beforehand. SSH keys can be added later
 with sudo vt-add-admin-key. Remote password login stays disabled. A downloaded
 bundle can also be started locally with sudo bash setup.sh (no key required).
@@ -44,3 +47,10 @@ Offline gateway checks and shell syntax checks passed on the existing laptop.
 This installer has NOT been executed on a fresh Fedora 44 computer. Actual GPU,
 VNC, SELinux, reboot, and remote connectivity still require target-machine tests.
 No setup can guarantee remote recovery if power, networking, boot or the OS fails.
+
+FINAL INSTALLER CHECKS
+Clock/network-time check; verified HTTPS; retrying downloads; Fedora 44 package
+names; ChatGPT installed before remote-access prompts; private error log.
+The installer does not run a full Fedora upgrade or automatically reboot.
+Log: /var/lib/vikingtools-setup/setup-latest.log
+Retry locally: sudo bash /var/lib/vikingtools-setup/source/setup.sh

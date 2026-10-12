@@ -186,9 +186,15 @@ signed RPM repositories. Run them as the normal admin user. DNF manages updates.
 Apply Fedora and app updates with `sudo dnf upgrade --refresh`. Plan a manual
 reboot for kernel updates and verify both GPUs and remote access afterward.
 Updates are not automatically installed during customer service operation.
+The initial installer also avoids a full Fedora upgrade after the reported
+post-update boot problem; installing required dependencies may still update some
+packages. It enables normal network-time sync and checks HTTPS certificates.
+Download failures are retried. Installation output is stored root-only at
+`/var/lib/vikingtools-setup/setup-latest.log`; Tailscale login and VNC password
+prompts go directly to the terminal rather than the log. Review logs before sharing.
 The setup saves selected previous configurations under
 `/var/lib/vikingtools-setup/backups/` and can be rerun with the same admin account.
-Rerunning reapplies the SSH/VNC policy and upgrades packages; it is not an uninstall.
+Rerunning reapplies the SSH/VNC policy and installs required packages; it is not an uninstall.
 It does not remove other login mechanisms or audit every local account or service.
 Use a genuinely fresh dedicated machine. Do not add customer shell accounts.
 

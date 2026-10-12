@@ -19,6 +19,11 @@ remote-access apps do not need to be installed beforehand. Fedora's built-in
 terminal, Bash, sudo and DNF are enough to start. Checksums check bundle integrity;
 they do not independently authenticate the repository publisher.
 
+The installer checks the clock, enables Fedora's normal network-time sync,
+retries HTTPS downloads, and saves a private installation log. It installs required
+packages without performing a full Fedora upgrade or rebooting automatically.
+ChatGPT is installed before remote-access login/password prompts.
+
 Sign into your own Tailscale account when the installer shows its login link, and
 choose a VNC password. When finished, open **ChatGPT** from the applications menu,
 sign in, and give it `FIRST-CHAT-PROMPT.txt` from your home folder.
@@ -79,3 +84,25 @@ sudo bash /tmp/vikingtools-browsers.sh
 Both receive updates through DNF. Installation follows [Brave's official Linux
 repository](https://brave.com/linux/) and [Google's package signing
 instructions](https://www.google.com/linuxrepositories/).
+
+## Install from the complete USB/download bundle
+
+Open the setup folder in Files, open a terminal there, and run:
+
+```sh
+sudo bash START-HERE.sh
+```
+
+No Git or AI app is required. The bundle is copied to the computer before setup,
+so the USB drive is only needed for the initial copy. Internet access is still
+required to download packages. Keep it connected until setup finishes, then eject
+it normally. The private log is `/var/lib/vikingtools-setup/setup-latest.log`.
+If setup fails, show the final error; do not post the complete log publicly.
+After resolving the reported problem, rerun locally with:
+
+```sh
+sudo bash /var/lib/vikingtools-setup/source/setup.sh
+```
+
+The Fedora 44 package list was checked against the Fedora/Updates repositories,
+including the renamed `tigervnc-x11-server` package and its VNC service files.

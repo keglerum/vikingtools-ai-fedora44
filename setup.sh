@@ -2,8 +2,10 @@
 # Run only on the NEW dedicated Fedora 44 computer, from its local terminal.
 set -Eeuo pipefail
 umask 077
-trap 'echo "Setup stopped at line $LINENO. Fix the reported error, then rerun. No automatic reboot." >&2' ERR
+STAGE=preflight
+trap 'echo "Setup stopped during $STAGE at line $LINENO. Log: ${LOG:-not started}. Fix the reported error, then rerun locally. No automatic reboot." >&2' ERR
 [[ $EUID == 0 ]] || { echo 'Run with sudo.' >&2; exit 1; }
+# shellcheck source=/dev/null
 source /etc/os-release
 [[ $ID == fedora && $VERSION_ID == 44 && $(uname -m) == x86_64 ]] || { echo 'Requires Fedora 44 x86_64.' >&2; exit 1; }
 [[ -z ${SSH_CONNECTION:-} ]] || { echo 'Initial setup must run at the local computer, to avoid remote lockout.' >&2; exit 1; }
@@ -21,6 +23,14 @@ KEY=${1:-}
 if [[ -n $KEY && ! -f $KEY ]]; then echo 'Public key file not found.' >&2; exit 1; fi
 INSTALL_MARKER=/var/lib/vikingtools-setup
 mkdir -p "$INSTALL_MARKER"
+chmod 700 "$INSTALL_MARKER"
+LOG="$INSTALL_MARKER/setup-$(date -u +%Y%m%dT%H%M%SZ).log"
+touch "$LOG"
+chmod 600 "$LOG"
+ln -sfn "$(basename "$LOG")" "$INSTALL_MARKER/setup-latest.log"
+exec > >(tee -a "$LOG") 2>&1
+echo "Installer log: $LOG"
+bash "$BASE/preflight.sh"
 if [[ -f $INSTALL_MARKER/admin ]]; then [[ $(cat "$INSTALL_MARKER/admin") == "$ADMIN" ]]; fi
 printf '%s\n' "$ADMIN" > "$INSTALL_MARKER/admin"
 BACKUP="$INSTALL_MARKER/backups/$(date -u +%Y%m%dT%H%M%SZ)"
@@ -29,21 +39,35 @@ for p in /etc/ssh/sshd_config /etc/tigervnc /etc/systemd/system/ollama.service.d
   [[ ! -e $p ]] || cp -a --parents "$p" "$BACKUP/"
 done
 
+STAGE=packages
 echo 'Installing admin tools, private remote desktop, and monitoring.'
-dnf -y upgrade --refresh
+echo 'No full Fedora upgrade is performed; required dependencies may still be updated.'
 dnf -y install curl ca-certificates git git-lfs openssh-server openssh-clients firewalld nftables \
-  python3 python3-pip nodejs npm ripgrep jq tmux rsync unzip tar zstd htop \
+  python3 python3-pip nodejs24 nodejs24-npm ripgrep jq tmux rsync unzip tar zstd htop \
   pciutils usbutils lsof strace sysstat smartmontools lm_sensors mokutil \
-  podman buildah gcc gcc-c++ make shellcheck policycoreutils-python-utils \
-  tigervnc-server tigervnc xfce4-session xfce4-panel xfce4-settings xfwm4 xfdesktop \
-  thunar xfce4-terminal firefox xorg-x11-xauth mesa-dri-drivers mesa-vulkan-drivers vulkan-tools
+  podman buildah gcc gcc-c++ make ShellCheck policycoreutils-python-utils \
+  tigervnc-x11-server tigervnc-server-common tigervnc-selinux tigervnc xfce4-session xfce4-panel xfce4-settings xfwm4 xfdesktop \
+  Thunar xfce4-terminal firefox xorg-x11-xauth mesa-dri-drivers mesa-vulkan-drivers vulkan-tools
+STAGE=chatgpt
+# Current official Fedora app installer. TLS download; DNF manages dependencies/updates.
+if ! rpm -q chatgpt >/dev/null 2>&1; then
+  curl --retry 3 --retry-delay 2 --connect-timeout 20 --proto '=https' --tlsv1.2 -fL https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm -o "$INSTALL_MARKER/chatgpt.x86_64.rpm"
+  dnf -y install "$INSTALL_MARKER/chatgpt.x86_64.rpm"
+fi
+# The desktop package includes Codex; create a terminal entry if it exists.
+if [[ -x /usr/lib/chatgpt/resources/codex ]]; then
+  ln -sfn /usr/lib/chatgpt/resources/codex /usr/local/bin/codex
+fi
+
+STAGE=browsers
 bash "$BASE/install-browsers.sh"
 systemctl enable --now firewalld
 # Keep Fedora's enforcing SELinux policy. Do not weaken it for remote access.
 [[ $(getenforce) == Enforcing ]] || { echo 'SELinux must be Enforcing. Restore it before continuing.' >&2; exit 1; }
 
+STAGE=remote-access
 if ! rpm -q tailscale >/dev/null 2>&1; then
-  curl --proto '=https' --tlsv1.2 -fsSL https://pkgs.tailscale.com/stable/fedora/tailscale.repo -o /etc/yum.repos.d/tailscale.repo
+  curl --retry 3 --retry-delay 2 --connect-timeout 20 --proto '=https' --tlsv1.2 -fsSL https://pkgs.tailscale.com/stable/fedora/tailscale.repo -o /etc/yum.repos.d/tailscale.repo
   dnf -y install tailscale
 fi
 systemctl enable --now tailscaled
@@ -51,7 +75,7 @@ systemctl enable --now tailscaled
 tailscale set --ssh=false
 if ! tailscale ip -4 >/dev/null 2>&1; then
   echo 'Sign into YOUR admin Tailscale account using the URL shown next.'
-  tailscale up --ssh=false
+  tailscale up --ssh=false > /dev/tty 2>&1
 fi
 TS_IP=$(tailscale ip -4)
 [[ $TS_IP =~ ^100\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
@@ -139,28 +163,19 @@ else printf ':1=%s\n' "$ADMIN" >> /etc/tigervnc/vncserver.users; fi
 printf 'localhost\nsecuritytypes=VncAuth\n' > /etc/tigervnc/vncserver-config-mandatory
 if [[ ! -f $ADMIN_HOME/.config/tigervnc/passwd ]]; then
   echo 'Set a VNC password (the encrypted SSH tunnel is the main access protection).'
-  runuser -l "$ADMIN" -c vncpasswd
+  runuser -l "$ADMIN" -c vncpasswd > /dev/tty 2>&1
 fi
 restorecon -RF "$ADMIN_HOME/.config/tigervnc" /etc/tigervnc
 systemctl enable vncserver@:1.service
 # Start via SSH after signing out of the physical desktop; concurrent sessions can fail.
 
-# Current official Fedora app installer. TLS download; DNF manages dependencies/updates.
-if ! rpm -q chatgpt >/dev/null 2>&1; then
-  curl --proto '=https' --tlsv1.2 -fL https://persistent.oaistatic.com/codex-app-prod/linux/rpm/latest/chatgpt.x86_64.rpm -o "$INSTALL_MARKER/chatgpt.x86_64.rpm"
-  dnf -y install "$INSTALL_MARKER/chatgpt.x86_64.rpm"
-fi
-# The desktop package includes Codex; create a terminal entry if it exists.
-if [[ -x /usr/lib/chatgpt/resources/codex ]]; then
-  ln -sfn /usr/lib/chatgpt/resources/codex /usr/local/bin/codex
-fi
-
+STAGE=local-model-runtime
 # Official manual runtime install avoids third-party installer's automatic GPU driver changes.
 if ! command -v ollama >/dev/null; then
-  curl --proto '=https' --tlsv1.2 -fL https://ollama.com/download/ollama-linux-amd64.tar.zst -o "$INSTALL_MARKER/ollama-amd64.tar.zst"
+  curl --retry 3 --retry-delay 2 --connect-timeout 20 --proto '=https' --tlsv1.2 -fL https://ollama.com/download/ollama-linux-amd64.tar.zst -o "$INSTALL_MARKER/ollama-amd64.tar.zst"
   tar --zstd -xf "$INSTALL_MARKER/ollama-amd64.tar.zst" -C /usr
-  if lspci -dn 1002: | rg -q .; then
-    curl --proto '=https' --tlsv1.2 -fL https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst -o "$INSTALL_MARKER/ollama-rocm.tar.zst"
+  if lspci -n -d 1002: | rg -q .; then
+    curl --retry 3 --retry-delay 2 --connect-timeout 20 --proto '=https' --tlsv1.2 -fL https://ollama.com/download/ollama-linux-amd64-rocm.tar.zst -o "$INSTALL_MARKER/ollama-rocm.tar.zst"
     tar --zstd -xf "$INSTALL_MARKER/ollama-rocm.tar.zst" -C /usr
   fi
 fi
@@ -265,16 +280,25 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 UNIT
+STAGE=service-verification
 systemctl daemon-reload
 systemctl enable --now vikingtools-help-network
 systemctl restart vikingtools-help-network
 systemctl enable ollama vikingtools-support
 systemctl restart ollama vikingtools-support
+for _attempt in {1..20}; do
+  if curl --noproxy '*' --connect-timeout 2 --max-time 3 -fsS http://127.0.0.1:8088/health >/dev/null; then break; fi
+  sleep 1
+done
+curl --noproxy '*' --connect-timeout 2 --max-time 3 -fsS http://127.0.0.1:8088/health
+systemctl is-active tailscaled vikingtools-ssh ollama vikingtools-help-network vikingtools-support
+rpm -q chatgpt google-chrome-stable brave-browser
 /usr/local/sbin/vt-gpu-inventory > "$INSTALL_MARKER/graphics-cards.json"
 echo "Automatic GPU report saved to $INSTALL_MARKER/graphics-cards.json"
 install -m 600 "$BASE/ADMIN-CONTROL.md" "$ADMIN_HOME/ADMIN-CONTROL.md"
 chown "$ADMIN:$(id -gn "$ADMIN")" "$ADMIN_HOME/ADMIN-CONTROL.md"
 install -m 600 -o "$ADMIN" -g "$(id -gn "$ADMIN")" "$BASE/FIRST-CHAT-PROMPT.txt" "$ADMIN_HOME/FIRST-CHAT-PROMPT.txt"
+echo "Completed. Installer log: $LOG"
 echo "Prepared. Admin SSH: ssh $ADMIN@$TS_IP"
 echo "VNC tunnel: ssh -N -L 5901:127.0.0.1:5901 $ADMIN@$TS_IP"
 echo 'Open ChatGPT as your admin user and sign in yourself. Never run the desktop app as root.'
