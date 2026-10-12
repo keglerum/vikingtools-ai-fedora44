@@ -37,6 +37,7 @@ dnf -y install curl ca-certificates git git-lfs openssh-server openssh-clients f
   podman buildah gcc gcc-c++ make shellcheck policycoreutils-python-utils \
   tigervnc-server tigervnc xfce4-session xfce4-panel xfce4-settings xfwm4 xfdesktop \
   thunar xfce4-terminal firefox xorg-x11-xauth mesa-dri-drivers mesa-vulkan-drivers vulkan-tools
+bash "$BASE/install-browsers.sh"
 systemctl enable --now firewalld
 # Keep Fedora's enforcing SELinux policy. Do not weaken it for remote access.
 [[ $(getenforce) == Enforcing ]] || { echo 'SELinux must be Enforcing. Restore it before continuing.' >&2; exit 1; }

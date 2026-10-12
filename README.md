@@ -34,6 +34,7 @@ it, open Terminal in the extracted folder, and run `sudo bash bootstrap.sh`.
 ## Included
 
 - Official ChatGPT desktop app and bundled Codex terminal tool.
+- Stable Google Chrome and Brave from their official signed RPM repositories.
 - Tailscale, SSH with an admin key, and loopback-only TigerVNC/Xfce.
 - Ollama in local-only mode and a restricted customer support gateway.
 - Automatic PCI/chipset, driver and memory discovery for GPUs, including mining cards.
@@ -64,3 +65,17 @@ bash -n setup.sh
 The `public-help-review` folder contains anonymous snapshots of public VikingTools pages from 12 October 2026. Review them before importing; they are not installed automatically. Actual credentials and keys are generated or supplied on the target and are not included here.
 
 See [README.txt](README.txt) for the short checklist and [official Linux app documentation](https://learn.chatgpt.com/docs/linux/linux-app) for platform limitations.
+
+## Add browsers to a computer already set up
+
+New installations include both browsers automatically. If setup was completed
+before they were added, open Terminal on that computer and run:
+
+```sh
+curl -fL https://raw.githubusercontent.com/keglerum/vikingtools-ai-fedora44/main/install-browsers.sh -o /tmp/vikingtools-browsers.sh
+sudo bash /tmp/vikingtools-browsers.sh
+```
+
+Both receive updates through DNF. Installation follows [Brave's official Linux
+repository](https://brave.com/linux/) and [Google's package signing
+instructions](https://www.google.com/linuxrepositories/).

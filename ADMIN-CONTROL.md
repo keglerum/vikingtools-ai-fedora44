@@ -180,6 +180,9 @@ Use `sudo vt-diagnostics` to inspect services, listeners and GPUs. View failures
 with `sudo journalctl -u vikingtools-support -u ollama -u vikingtools-ssh --since today`.
 Logs may contain device/network details; review before sharing.
 
+Chrome and Brave are installed as native stable packages from their official
+signed RPM repositories. Run them as the normal admin user. DNF manages updates.
+
 Apply Fedora and app updates with `sudo dnf upgrade --refresh`. Plan a manual
 reboot for kernel updates and verify both GPUs and remote access afterward.
 Updates are not automatically installed during customer service operation.

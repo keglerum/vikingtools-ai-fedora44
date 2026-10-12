@@ -19,7 +19,7 @@ with sudo vt-add-admin-key. Remote password login stays disabled. A downloaded
 bundle can also be started locally with sudo bash setup.sh (no key required).
 
 INSTALLED
-Tailscale; private SSH; private TigerVNC/Xfce desktop; ChatGPT with bundled Codex;
+Google Chrome and Brave (official stable repositories); Tailscale; private SSH; private TigerVNC/Xfce desktop; ChatGPT with bundled Codex;
 Python/Node development tools; Git; Podman; monitoring/diagnostic tools; Ollama;
 a restricted customer support gateway; admin-only model/knowledge controls.
 
