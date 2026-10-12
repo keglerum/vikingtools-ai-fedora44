@@ -1,0 +1,37 @@
+[Unit]
+Description=VikingTools private customer help gateway
+After=network.target ollama.service vikingtools-help-network.service
+Requires=ollama.service vikingtools-help-network.service
+[Service]
+User=vt-help
+Group=vt-help
+ExecStart=/usr/bin/python3 -I /opt/vikingtools-ai/support.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictNamespaces=true
+RestrictAddressFamilies=AF_INET
+IPAddressDeny=any
+IPAddressAllow=localhost
+SocketBindDeny=any
+SocketBindAllow=ipv4:tcp:8088
+InaccessiblePaths=-/root -/home -/run/user -/var/lib/tailscale -/var/lib/vikingtools-setup -/var/lib/vikingtools-ollama
+MemoryMax=512M
+TasksMax=32
+CPUQuota=100%
+LimitNOFILE=128
+[Install]
+WantedBy=multi-user.target

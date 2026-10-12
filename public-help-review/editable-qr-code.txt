@@ -1,0 +1,136 @@
+Public source: https://vikingtools.no/editable-qr-code
+Retrieved: 2026-10-12T20:46:56.253868+00:00
+
+Editable QR Code Generator: Change Links Without Reprinting | VikingToolsSkip to contentv.vikingtoolsAlfa
+
+All toolsSign inThe Adobe shop ↗
+
+Editable QR-code generator
+
+Print the QR code once. Change the link later.
+
+Put a QR code on a poster, business card, table sign or product insert. When the website destination changes, update your saved code instead of replacing the printed design.
+
+Create an editable QR codeTry the example
+
+Try the example without an account. Sign in to save an editable code.
+
+VikingToolsThe interactive QR example: save a new destination and test it while the printed code stays unchanged. Enlarge screenshot ↗
+
+01
+
+Keep your printed materials useful
+
+The code points to a saved VikingTools link. Update its destination when a campaign, page or menu moves.02
+
+Make the next scan go to the right place
+
+Save the new website address in your QR archive, then scan the printed code to check the result.03
+
+Find your codes again
+
+Your account’s QR library keeps saved codes together so you can reopen them and manage their destinations.
+
+Made for places people discover
+
+One code. A link you can change.
+
+Put your saved QR code on a table, counter or printed card. Update its destination from your archive when your plans change.
+
+Three simple steps
+
+How it works
+
+Create the hosted code before you print. A test scan now makes later destination updates easier to check.Read the practical guides ↗
+
+1
+
+Sign in and enter a destination
+
+Create an editable website code, give it a useful name and enter the website address it should open.
+
+2
+
+Download and test your code
+
+Save the code, download its image and scan it on a phone before printing a large batch. Keep good contrast and clear space around it.
+
+3
+
+Update from your archive
+
+Reopen the saved code when the destination changes. Save the new address and scan the original printed code again.
+
+Your archive
+
+Your QR archive is where updates happen
+
+Sign in to create and manage hosted editable codes in your QR library. Reopen a saved code to update its website destination. The printed code’s saved link stays the same while its destination changes. Editable codes depend on the VikingTools redirect service; keep that in mind for long-lived printed materials. Deleting a code removes its hosted redirect.
+
+Open my archiveSign in or create an account▱
+
+Your archive
+
+Find each saved code by nameChange its website destinationKeep the same code on your printed materials
+
+Editable codes use the VikingTools redirect service. Deleting a code disables its hosted link.
+
+Start free
+
+Accounts & membership
+
+Start with the free account. Choose membership when its extra capacity is useful to you.
+
+Free account
+
+Free
+
+Up to 5 saved editable QR codes. The separate static QR generator also works without an account.Sign in or create an accountOptional membership
+
+US$2.99/month
+
+Up to 100 saved editable QR codes, plus higher limits on other saved tools and an ad-free experience.
+
+Membership also removes ads across VikingTools.See membership in my account
+
+Membership renews monthly; cancel from your account. Check the final price, payment availability and terms before subscribing. Membership raises selected limits, not every limit. Membership terms.
+
+Explore the tool
+
+Try it for yourself
+
+Change the sample destination and test the result. Changes stay in this example; no real hosted QR code is created.
+
+Your printed code
+
+This code opens this demo. Destination changes below are simulated locally; no account or hosted code is created.Download SVG
+
+Website destination
+
+Try another destinationRestaurant menusPhotographic flipbooksSave destination
+
+Simulate a scan
+
+A scan now opensStart again
+
+Create my editable QR codeOpen your QR library
+
+Your questions, answered
+
+Good to knowCan any existing QR code be made editable?
+
+No. A static code contains its destination directly. An editable code must be created with a hosted link from the start. Updating that link’s destination is what makes later changes possible.Does the example create a real hosted code?
+
+No. The example simulates destination updates locally. Sign in to create a saved editable code that works outside the demonstration.Should I use a static or editable QR code?
+
+Use a static code if its address will not change and you want the code to point directly there. Choose an editable code when changing destinations without reprinting is useful.
+
+More ways to create with VikingTools
+
+Digital restaurant menus↗PDF and image flipbooks↗Knitting pattern designer↗
+
+Read this page in Norwegian ↗
+
+Ready to make your own?Create an editable QR code
+
+Close screenshot

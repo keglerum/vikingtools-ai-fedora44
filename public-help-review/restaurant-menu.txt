@@ -1,0 +1,156 @@
+Public source: https://vikingtools.no/restaurant-menu
+Retrieved: 2026-10-12T20:46:55.676370+00:00
+
+Digital Restaurant Menu, QR Ordering & Display Screens | VikingToolsSkip to contentv.vikingtoolsAlfa
+
+All toolsSign inThe Adobe shop ↗
+
+Digital restaurant menus
+
+One menu. Every screen. Every table.
+
+Create menus for TVs and monitors, with a design for each screen. Guests scan your QR code to browse on their phones. Enable mobile ordering when you want orders sent to your staff.
+
+Create a restaurant menuTry the example
+
+Guests pay at the restaurant by default. Online payment is optional.
+
+VikingToolsThe actual restaurant display: dish photos, descriptions and prices in an editorial layout. Enlarge screenshot ↗
+
+01
+
+Update the menu once
+
+Change a dish, price or availability in one editor. Saved changes feed the public menu and its assigned screens.02
+
+A different job for each screen
+
+Show lunch on one monitor and coffee on another. Choose each screen’s sections, layout and appearance.03
+
+A clear order for guests and staff
+
+Guests enter their table number and preparation requests. Staff see the order number and move it through preparing, ready and collected.
+
+Presentation that starts with your food
+
+From the big screen to the guest’s phone
+
+Give your dishes a beautiful place on screen. The same menu can welcome guests on their phones through a QR code.
+
+Three simple steps
+
+How it works
+
+Start with a few dishes, check your screen layout, then scan the QR menu on a phone.Read the practical guides ↗
+
+1
+
+Add your dishes
+
+Create sections, add prices and photos, and check allergens. Describe what you actually serve.
+
+2
+
+Design your screens
+
+Choose the sections and design for each display. Save, open its screen link and check it from a customer’s distance.
+
+3
+
+Share the QR menu
+
+Print the QR sign and scan it on a phone. Enable ordering separately if you want to receive orders, then test the staff queue.
+
+Your archive
+
+Your menus, ready for the next service
+
+Sign in to keep menus in your account archive. Reopen a menu to edit dishes, photos, screen designs and ordering settings. The menu’s saved links keep pointing to that menu when you update it. Deleting a menu also removes access to its public views.
+
+Open my archiveSign in or create an account▱
+
+Your archive
+
+Keep dishes, photos and prices togetherReopen each screen’s designUpdate the menu behind your existing links
+
+Check your public menu and screens after each update.
+
+Start free
+
+Accounts & membership
+
+Start with the free account. Choose membership when its extra capacity is useful to you.
+
+Free account
+
+Free
+
+2 saved menus, up to 8 screens per menu and 1 MB of menu photos across your account.Sign in or create an accountOptional membership
+
+US$2.99/month
+
+Up to 10 saved menus and 5 MB of menu photos. The same 8-screen limit applies to each menu; photos are compressed to a maximum of 100 KB each.
+
+Membership also removes ads across VikingTools.See membership in my account
+
+Membership renews monthly; cancel from your account. Check the final price, payment availability and terms before subscribing. Membership raises selected limits, not every limit. Membership terms.
+
+Explore the tool
+
+Try it for yourself
+
+Try the customer menu, staff queue and collection board with sample dishes. Orders stay in this example; no real orders or payments are sent.
+
+01 /
+
+Choose a display designEditorialNordicBistroNightMarketAtelierElectricNoirPaperChalkStreetSunsetBotanicalRivieraBerryEmberAuroraPoster
+
+Same menu. Different atmosphere. Each screen can have its own design and dish selection.
+
+THE DISPLAY EXPERIENCE
+
+Screen 1 · Kitchen favouritesOpen full size
+
+Screen 2 · Coffee and pastriesIts own style
+
+TRY THE GUEST EXPERIENCE
+
+GUEST'S PHONE
+
+North TableFresh food, simply made
+
+Demo order · Nothing is sent or charged
+
+Your demo order
+
+Your order number
+
+The number written on your tableEnter the number on your physical table so staff can bring your order to you.
+
+Preparation instructions (optional)Up to 500 characters.
+
+Total0 NOKTry an order
+
+Start again
+
+Display previews use the same renderer as the restaurant tool. The phone order is a local demonstration: no real restaurant is contacted, no account is created and no payment is taken. Actual ordering can require sign-in or verified email; online payment is optional.
+
+Your questions, answered
+
+Good to knowDoes a restaurant need Stripe to receive orders?
+
+No. Guests pay at the restaurant by default, so you can receive orders without Stripe. Online payment is optional and requires the restaurant’s payment connection. A VikingTools subscription does not connect restaurant payments automatically.Can customers browse without signing in?
+
+Yes. Everyone can view the public menu. The restaurant decides whether ordering requires verified email or sign-in, or whether guest ordering is allowed.Will a demo order reach a real restaurant?
+
+No. The example below uses local sample orders. It demonstrates the staff queue, collection board and customer receipt without sending an order or taking a payment.
+
+More ways to create with VikingTools
+
+PDF and image flipbooks↗Knitting pattern designer↗Editable QR-code generator↗
+
+Read this page in Norwegian ↗
+
+Ready to make your own?Create a restaurant menu
+
+Close screenshot

@@ -1,0 +1,5 @@
+VikingTools is available at https://vikingtools.no. This assistant provides general help and cannot access your account, process payments, or change your saved content.
+
+For a problem, describe the tool, what you were trying to do, the exact error text, and whether you are using a phone or computer. Do not send passwords, one-time login codes, private keys, or payment card details. Avoid including personal customer information in examples.
+
+Before refreshing a page or clearing browser data, preserve any unsaved work. If something is unclear or a problem continues, contact the site administrator through the support route available on the website. No email address or response time has been verified for this assistant.
